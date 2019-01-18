@@ -10,16 +10,24 @@ import './app.css';
 
 export default class App extends Component {
 
-
-	maxId = 100;
+	maxId = 1;
 
 	state = {
 		toDoData: [
-			{label: 'Drink Coffee', important: false, id: 1},
-			{label: 'Make Awesome App', important: true, id: 2},
-			{label: 'Have a Lunch', important: false, id: 3}
+			this.createTodoItem('Drink Coffee'),
+			this.createTodoItem('Make Awesome App'),
+			this.createTodoItem('Have a Lunch')
 		]
 	};
+
+	createTodoItem(label) {
+		return {
+			label,
+			important: false,
+			done: false,
+			id: this.maxId++
+		}
+	}
 
 	deleteItem = (id) => {
 		this.setState(({ toDoData }) => {
@@ -40,11 +48,7 @@ export default class App extends Component {
 
 	addItem = (text) => {
 
-		const newItem = {
-			label: text,
-			important: false,
-			id: this.maxId++
-		};
+		const newItem = this.createTodoItem(text);
 
 		this.setState(({ toDoData }) => {
 			const newArray = [
@@ -56,20 +60,61 @@ export default class App extends Component {
 				toDoData: newArray
 			}
 		})
-		// console.log('Added', text)
+	};
+
+	toggleProperty(arr, id, propName) {
+		const idx = arr.findIndex((el) => el.id === id);
+
+		// 1. обновляем объект
+		const oldItem = arr[idx];
+		const newItem = {...oldItem, [propName]: !oldItem[propName]}; // с помощью spread забираем все данные из oldItem и перезаписываем свойство done новым
+
+		// 2. создаем новый массив
+		return [
+			...arr.slice(0, idx),
+			newItem,
+			...arr.slice(idx+1)
+		];
+	};
+
+	onToggleDone = (id) => {
+		this.setState(({ toDoData }) => {
+			return {
+				toDoData: this.toggleProperty(toDoData, id, 'done')
+			}
+		})
+	};
+
+	onToggleImportant = (id) => {
+		this.setState(({ toDoData }) => {
+			return {
+				toDoData: this.toggleProperty(toDoData, id, 'important')
+			}
+		})
 	};
 
 	render() {
+
+		const { toDoData } = this.state;
+
+		console.log(toDoData)
+
+		const doneCount = toDoData.filter((item) => item.done).length;
+		const todoCount = toDoData.length - doneCount;
+
 		return (
 			<div className='todo-app'>
-				<AppHeader toDo={1} done={3} />
+				<AppHeader toDo={todoCount} done={doneCount} />
 				<div className='top-panel d-flex'>
 					<SearchPanel/>
 					<ItemStatusFilter />
 				</div>
 				<TodoList
-					todos={this.state.toDoData}
+					todos={toDoData}
 					onDeleted={ this.deleteItem }
+					onToggleImportant={ this.onToggleImportant }
+					onToggleDone={ this.onToggleDone }
+
 				/> {/* здесь передаем props в компонент ToDoList */}
 				<ItemAddForm
 					onItemAdded={ this.addItem }

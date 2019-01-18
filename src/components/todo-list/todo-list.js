@@ -3,7 +3,7 @@ import React from "react";
 import TodoListItem from '../todo-list-item';
 import './todo-list.css';
 
-const TodoList = ({ todos, onDeleted }) => { /* с помощью деструктуризации забираем массив объектов из App*/
+const TodoList = ({ todos, onDeleted, onToggleImportant, onToggleDone }) => { /* с помощью деструктуризации забираем массив объектов из App*/
 
     // перебираем все объекты в массиве todos
     const elements = todos.map((item) => {
@@ -14,7 +14,9 @@ const TodoList = ({ todos, onDeleted }) => { /* с помощью деструк
             <li key={id} className='list-group-item'>
                 <TodoListItem
                     { ...itemProps }
-                    onDeleted={() => onDeleted(id)} // вызываем функцию переданную в пропсы из App.
+                    onDeleted={() => onDeleted(id)}
+	                onToggleImportant = {() => onToggleImportant(id)}
+                    onToggleDone = {() => onToggleDone(id)}// вызываем функцию переданную в пропсы из App.
                 />
             </li>
         )

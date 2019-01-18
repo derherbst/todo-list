@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 
 import './todo-list-item.css';
 
-export default class TodoListItem extends Component {
+const TodoListItem = ({important, done, label, onDeleted, onToggleImportant, onToggleDone}) => {
 
 	// constructor() {
 	// 	super();
@@ -16,46 +16,48 @@ export default class TodoListItem extends Component {
 	// 	// }
 	// }
 
-	state = { // новый синтаксис чтобы не объявлять все в конструкторе
-		done: false,
-		important: false
-	};
+	// state = { // новый синтаксис чтобы не объявлять все в конструкторе
+	// 	done: false,
+	// 	important: false
+	// };
 
-	onLabelClick = () => { // новый стандарт (поля классов/ class fields)
-		this.setState(({ done }) => { // state нельзя изменять после инициализации. чтобы его изменить используем функцию setState
-			// передаем в качестве аругемента не объект, а функцию потому что нам необъолдимо изменять состояние в зависимости от предыдущего состояния
-			return {
-				done: !done
-			}
-		})
-	};
+	// onLabelClick = () => { // новый стандарт (поля классов/ class fields)
+	// 	this.setState(({ done }) => { // state нельзя изменять после инициализации. чтобы его изменить используем функцию setState
+	// 		// передаем в качестве аругемента не объект, а функцию потому что нам необъолдимо изменять состояние в зависимости от предыдущего состояния
+	// 		return {
+	// 			done: !done
+	// 		}
+	// 	})
+	// };
+	//
+	// onMarkImportant = () => {
+	// 	this.setState((state) => {
+	// 		return {
+	// 			important: !state.important
+	// 		}
+	// 	})
+	// };
 
-	onMarkImportant = () => {
-		this.setState((state) => {
-			return {
-				important: !state.important
-			}
-		})
-	};
+	let classNames = 'todo-list-item';
+	if (important) {
+		classNames += ' important';
+	}
 
-	render() { // функция отрисовывает контент. тоже самое что и в теле функции до этого
+	if (done) {
+		classNames += ' done';
+	}
 
-		const { label, onDeleted } = this.props;
-		const { done, important } = this.state;
-
-		let classNames = `todo-list-item ${done ? 'done' : ''} ${important ? 'important' : ''}`;
-
-		return (
-			<span className={ classNames }>
+	return (
+		<span className={ classNames }>
             <span
 	            className="todo-list-item-label"
-                onClick={ this.onLabelClick }>
+                onClick={ onToggleDone }>
             {label}
             </span>
 
             <button type="button"
                     className="btn btn-outline-success btn-sm float-right"
-                    onClick={ this.onMarkImportant }>
+                    onClick={ onToggleImportant }>
                 <i className="fa fa-exclamation" />
             </button>
 
@@ -66,6 +68,7 @@ export default class TodoListItem extends Component {
                 <i className="fa fa-trash-o" />
             </button>
         </span>
-		);
-	}
-}
+	);
+};
+
+export default TodoListItem;
