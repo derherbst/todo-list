@@ -4,10 +4,6 @@ import './item-status-filter.css';
 
 export default class ItemStatusFilter extends Component {
 
-	// state = {
-	// 	isActive: 'active'
-	// };
-
 	buttons = [
 		{ name: 'all', label: 'All'},
 		{ name: 'active', label: 'Active'},

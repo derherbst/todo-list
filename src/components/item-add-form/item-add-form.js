@@ -12,7 +12,6 @@ export default class ItemAddForm extends Component {
 		this.setState({
 			label: e.target.value
 		});
-		console.log(this.state.label);
 	};
 
 	onSubmit = (e) => {

@@ -66,7 +66,6 @@ export default class App extends Component {
 	};
 
 	toggleProperty = (arr, id, propName) => {
-		console.log(this);
 		const idx = arr.findIndex((el) => el.id === id);
 
 		// 1. обновляем объект
@@ -82,7 +81,6 @@ export default class App extends Component {
 	};
 
 	onToggleDone = (id) => {
-		console.log(this);
 		this.setState(({ toDoData }) => {
 			return {
 				toDoData: this.toggleProperty(toDoData, id, 'done')
@@ -105,7 +103,6 @@ export default class App extends Component {
 	};
 
 	onFilterChange = (value) => {
-		console.log(value);
 		this.setState({
 			filterStatus: value
 		})
