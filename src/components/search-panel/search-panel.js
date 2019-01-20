@@ -12,7 +12,7 @@ export default class SearchPanel extends Component {
 	    this.setState({
 		    label: e.target.value
 	    });
-	    this.props.onFiltered(e.target.value);
+	    this.props.onSearch(e.target.value);
     };
 
     render() {
