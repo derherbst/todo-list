@@ -17,7 +17,8 @@ export default class App extends Component {
 			this.createTodoItem('Drink Coffee'),
 			this.createTodoItem('Make Awesome App'),
 			this.createTodoItem('Have a Lunch')
-		]
+		],
+		term: ''
 	};
 
 	createTodoItem(label) {
@@ -25,7 +26,8 @@ export default class App extends Component {
 			label,
 			important: false,
 			done: false,
-			id: this.maxId++
+			id: this.maxId++,
+			hidden: false
 		}
 	}
 
@@ -62,7 +64,8 @@ export default class App extends Component {
 		})
 	};
 
-	toggleProperty(arr, id, propName) {
+	toggleProperty = (arr, id, propName) => {
+		console.log(this);
 		const idx = arr.findIndex((el) => el.id === id);
 
 		// 1. обновляем объект
@@ -78,6 +81,7 @@ export default class App extends Component {
 	};
 
 	onToggleDone = (id) => {
+		console.log(this);
 		this.setState(({ toDoData }) => {
 			return {
 				toDoData: this.toggleProperty(toDoData, id, 'done')
@@ -93,12 +97,22 @@ export default class App extends Component {
 		})
 	};
 
+	onSearchChange = (value) => {
+		this.setState({
+			term: value
+		})
+	};
+
+	search(items, term) {
+		if (term.length === 0) {
+			return items;
+		}
+		return items.filter((el) => el.label.includes(term))
+	}
+
 	render() {
-
-		const { toDoData } = this.state;
-
-		console.log(toDoData)
-
+		const { toDoData, term } = this.state;
+		const visibleItems = this.search(toDoData, term);
 		const doneCount = toDoData.filter((item) => item.done).length;
 		const todoCount = toDoData.length - doneCount;
 
@@ -106,11 +120,13 @@ export default class App extends Component {
 			<div className='todo-app'>
 				<AppHeader toDo={todoCount} done={doneCount} />
 				<div className='top-panel d-flex'>
-					<SearchPanel/>
+					<SearchPanel
+						onFiltered={ this.onSearchChange }
+					/>
 					<ItemStatusFilter />
 				</div>
 				<TodoList
-					todos={toDoData}
+					todos={ visibleItems }
 					onDeleted={ this.deleteItem }
 					onToggleImportant={ this.onToggleImportant }
 					onToggleDone={ this.onToggleDone }

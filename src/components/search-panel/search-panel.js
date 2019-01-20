@@ -1,15 +1,28 @@
-import React from "react";
+import React, { Component } from "react";
 
 import './search-panel.css'
 
-const SearchPanel = () => {
-    const searchText = 'Type here to search';
+export default class SearchPanel extends Component {
 
-    return (
-        <input type="text"
-               className="form-control search-input"
-               placeholder={searchText} />
-    )
+    state = {
+	    label: ''
+    };
+
+    onLabelChange = (e) => {
+	    this.setState({
+		    label: e.target.value
+	    });
+	    this.props.onFiltered(e.target.value);
+    };
+
+    render() {
+	    return (
+		    <input type="text"
+		           className="form-control search-input"
+		           placeholder='Type here to search'
+		           onChange={this.onLabelChange}
+		           value={this.state.label}
+		    />
+	    )
+    }
 };
-
-export default SearchPanel;
